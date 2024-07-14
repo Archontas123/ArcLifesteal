@@ -1,0 +1,62 @@
+# LifeSteal Plugin Configuration
+
+# Base number of hearts players start with
+base-heart-count: 10
+
+# Maximum number of hearts a player can have
+max-hearts: 20
+
+# Maximum number of times a player can prestige
+max-prestige: 10
+
+# Chance of dropping a heart fragment on kill (after max prestige)
+heart-fragment-chance: 0.25
+
+# Whether to ban players when they reach 0 hearts
+ban-on-zero-hearts: true
+
+# Duration of ban when reaching 0 hearts (in days, set to -1 for permanent)
+ban-duration: -1
+
+# Message to display when a player is banned
+ban-message: "You have been eliminated! You can be revived by another player."
+
+# Whether to allow crafting of heart items
+
+# Whether to allow crafting of revival beacons
+
+# Message to display when a player is revived
+revival-message: "You have been revived! Welcome back!"
+
+# Default number of hearts to give a revived player
+revived-heart-count: 10
+
+
+# Plugin configuration
+allow-heart-crafting: true
+allow-revival-beacon-crafting: true
+
+# Default heart recipe
+heart-recipe:
+  shape:
+    line1: "DDD"
+    line2: "DFD"
+    line3: "DND"
+  ingredients:
+    D: "DIAMOND_BLOCK"
+    F: "PRISMARINE_CRYSTALS"
+    N: "NETHERITE_INGOT"
+
+# Default heart fragment recipe
+heart-fragment-recipe:
+  shape:
+    line1: "GRG"
+    line2: "RTR"
+    line3: "GRG"
+  ingredients:
+    G: "GOLD_BLOCK"
+    R: "REDSTONE_BLOCK"
+    T: "TOTEM_OF_UNDYING"
+
+# Resource pack URL for custom textures
+resource-pack-url: "http://example.com/resourcepack.zip"
