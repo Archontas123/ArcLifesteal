@@ -52,14 +52,15 @@ public class HeartManager {
     }
 
     public void setHearts(Player player, int hearts) {
-        int maxHearts = plugin.getConfig().getInt("max-hearts", 20);
+        int maxHearts = plugin.getPrestigeManager().getHeartCap(player);
         hearts = Math.min(hearts, maxHearts);
         playerHearts.put(player.getUniqueId(), hearts);
+
         AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (attribute != null) {
             attribute.setBaseValue(hearts * 2);
         }
-        player.setHealth(player.getHealth()); // This will cap health at the new max
+        player.setHealth(Math.min(player.getHealth(), hearts * 2)); // Ensure health is within the max
         saveHearts();
     }
 
@@ -105,9 +106,16 @@ public class HeartManager {
         return 0;
     }
 
+    public void setOfflineHearts(UUID playerUUID, int hearts) {
+        int maxHearts = plugin.getConfig().getInt("max-hearts", 20);
+        hearts = Math.min(hearts, maxHearts);
+        playerHearts.put(playerUUID, hearts);
+        saveHearts();
+    }
+
     private void eliminatePlayer(Player player) {
         int banDuration = plugin.getConfig().getInt("ban-duration", -1);
-        String banMessage = plugin.getConfig().getString("ban-message", "You have been eliminated!");
+        String banMessage = plugin.getConfig().getString("ban-message", "§c[Lifesteal] §7You have been eliminated!");
         if (banDuration < 0) {
             Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), banMessage, null, null);
         } else {

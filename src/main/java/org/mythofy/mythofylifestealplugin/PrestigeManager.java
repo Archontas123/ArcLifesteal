@@ -1,5 +1,6 @@
 package org.mythofy.mythofylifestealplugin;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -44,24 +45,40 @@ public class PrestigeManager {
     public int getHeartCap(Player player) {
         int baseHeartCap = plugin.getConfig().getInt("base-heart-cap", 20);
         int prestigeLevel = getPrestigeLevel(player);
-        return baseHeartCap + prestigeLevel;
+        return baseHeartCap + Math.min(prestigeLevel, maxPrestige);
+    }
+
+    public int getMaxPrestige() {
+        return maxPrestige;
     }
 
     public boolean canPrestige(Player player) {
-        int currentLevel = getPrestigeLevel(player);
-        return currentLevel < maxPrestige && plugin.getHeartManager().getHearts(player) >= getHeartCap(player);
+        int heartCap = getHeartCap(player);
+        int currentHearts = plugin.getHeartManager().getHearts(player);
+        return currentHearts >= heartCap;
     }
 
     public void prestige(Player player) {
-        if (canPrestige(player)) {
-            int newLevel = getPrestigeLevel(player) + 1;
+        int currentLevel = getPrestigeLevel(player);
+        if (currentLevel < maxPrestige) {
+            int newLevel = currentLevel + 1;
             prestigeLevels.put(player.getUniqueId(), newLevel);
-            plugin.getHeartManager().setHearts(player, 10); // Reset to base hearts
+            plugin.getHeartManager().setHearts(player, 10); // Reset to 10 hearts
             savePrestigeLevels();
-            player.sendMessage("You have prestiged to level " + newLevel + "!");
+            player.sendMessage("§c[Lifesteal] §7You have prestiged to level " + newLevel + "!");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "prewards " + player.getName());
         } else {
-            player.sendMessage("You cannot prestige at this time.");
+            player.sendMessage("§c[Lifesteal] §7You have already prestiged the maximum number of times.");
         }
+    }
+
+    public void extraPrestige(Player player) {
+        int currentLevel = getPrestigeLevel(player);
+        prestigeLevels.put(player.getUniqueId(), currentLevel + 1);
+        plugin.getHeartManager().setHearts(player, 10); // Reset to 10 hearts
+        savePrestigeLevels();
+        player.sendMessage("§c[Lifesteal] §7You have prestiged to level " + (currentLevel + 1) + ", but your heart cap remains the same.");
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "prewards2 " + player.getName());
     }
 
     public void savePrestigeLevels() {

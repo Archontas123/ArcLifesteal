@@ -1,7 +1,9 @@
 package org.mythofy.mythofylifestealplugin;
 
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -29,6 +31,7 @@ public class RevivalManager {
         recipe.setIngredient('B', Material.BEACON);
 
         Bukkit.addRecipe(recipe);
+        plugin.getLogger().info("[LifeStealPlugin] Revival beacon recipe registered.");
     }
 
     private ItemStack createRevivalBeacon() {
@@ -38,32 +41,42 @@ public class RevivalManager {
         List<String> lore = Arrays.asList("§7Use this beacon to revive", "§7an eliminated player");
         meta.setLore(lore);
         beacon.setItemMeta(meta);
+        plugin.getLogger().info("[LifeStealPlugin] Created revival beacon item.");
         return beacon;
     }
 
     public boolean revivePlayer(String playerName) {
-        Player target = Bukkit.getPlayer(playerName);
-        if (target == null) {
-            // Check if the player is in the eliminated players list
-            // For simplicity, we're assuming a player is eliminated if they're offline
-            // In a full implementation, you'd check a database or file of eliminated players
-            target = Bukkit.getOfflinePlayer(playerName).getPlayer();
-            if (target == null) {
-                return false;
+        plugin.getLogger().info("[LifeStealPlugin] Attempting to revive player: " + playerName);
+        OfflinePlayer target = Bukkit.getOfflinePlayer(playerName);
+
+        // Unban the player if they were banned
+        Bukkit.getBanList(BanList.Type.NAME).pardon(playerName);
+        plugin.getLogger().info("[LifeStealPlugin] Player " + playerName + " has been unbanned.");
+
+        // If the player is online, set their hearts immediately
+        if (target.isOnline()) {
+            Player onlinePlayer = target.getPlayer();
+            if (onlinePlayer != null) {
+                plugin.getHeartManager().setHearts(onlinePlayer, 10);
+                onlinePlayer.sendMessage("§c[Lifesteal] §7You have been revived!");
+                plugin.getLogger().info("[LifeStealPlugin] Revived online player: " + playerName);
+                return true;
             }
+        } else {
+            // If the player is offline, set their hearts when they join
+            plugin.getHeartManager().setOfflineHearts(target.getUniqueId(), 10);
+            plugin.getLogger().info("[LifeStealPlugin] Set offline hearts for player: " + playerName);
+            return true;
         }
 
-        // Revive the player
-        plugin.getHeartManager().setHearts(target, 10); // Reset to base hearts
-        // If the player was banned, unban them here
-        // Bukkit.getBanList(BanList.Type.NAME).pardon(playerName);
-
-        target.sendMessage("You have been revived!");
-        return true;
+        plugin.getLogger().info("[LifeStealPlugin] Failed to revive player: " + playerName);
+        return false;
     }
 
     public boolean isRevivalBeacon(ItemStack item) {
-        return item != null && item.getType() == Material.BEACON && item.hasItemMeta() &&
+        boolean result = item != null && item.getType() == Material.BEACON && item.hasItemMeta() &&
                 item.getItemMeta().getDisplayName().equals("§6Revival Beacon");
+        plugin.getLogger().info("[LifeStealPlugin] Checking if item is revival beacon: " + result);
+        return result;
     }
 }
