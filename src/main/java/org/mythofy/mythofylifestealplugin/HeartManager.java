@@ -60,7 +60,14 @@ public class HeartManager {
         if (attribute != null) {
             attribute.setBaseValue(hearts * 2);
         }
-        player.setHealth(Math.min(player.getHealth(), hearts * 2)); // Ensure health is within the max
+
+        double currentHealth = player.getHealth();
+        double maxHealth = hearts * 2;
+
+        if (currentHealth > maxHealth) {
+            player.setHealth(maxHealth); // Reduce current health to new max if necessary
+        }
+
         saveHearts();
     }
 
@@ -113,7 +120,7 @@ public class HeartManager {
         saveHearts();
     }
 
-    private void eliminatePlayer(Player player) {
+    public void eliminatePlayer(Player player) {
         int banDuration = plugin.getConfig().getInt("ban-duration", -1);
         String banMessage = plugin.getConfig().getString("ban-message", "§c[Lifesteal] §7You have been eliminated!");
         if (banDuration < 0) {
