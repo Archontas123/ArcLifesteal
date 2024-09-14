@@ -1,0 +1,95 @@
+# Configuration for MythofyLifestealPlugin
+
+# Base heart count for players
+base-heart-count: 10
+
+# Maximum hearts a player can have
+max-hearts: 20
+
+# Additional hearts a player receives per prestige level
+hearts-per-prestige-level: 2
+
+# Duration of ban in days when a player is eliminated (-1 for permanent)
+ban-duration: -1
+
+# Ban message when a player is eliminated
+ban-message: "§c[Lifesteal] §7You have been eliminated!"
+
+# Enable or disable heart reward on elimination
+heartRewardOnElimination: true
+
+# Disable banning a player on elimination (set their hearts to min-hearts instead)
+disablePlayerBanOnElimination: false
+
+# Announce when a player is eliminated
+announceElimination: true
+
+# Drop heart items on player death
+dropHearts: true
+
+# Drop heart items if killer is at maximum hearts
+dropHeartsIfMax: true
+
+# Whether players lose hearts to natural causes (non-player deaths)
+looseHeartsToNature: true
+
+# Whether players lose hearts when killed by other players
+looseHeartsToPlayer: true
+
+# Configuration for heart gain cooldown
+heartGainCooldown:
+  enabled: false
+  cooldown: 60000 # Cooldown in milliseconds (1 minute)
+  dropOnCooldown: true
+
+# Configuration for recipes
+allow-heart-crafting: true
+allow-revival-beacon-crafting: true
+
+# Heart recipe
+heart-recipe:
+  shape:
+    line1: "DDD"
+    line2: "DFD"
+    line3: "DND"
+  ingredients:
+    D: DIAMOND_BLOCK
+    F: PRISMARINE_CRYSTALS
+    N: NETHERITE_INGOT
+
+# Heart fragment recipe
+heart-fragment-recipe:
+  shape:
+    line1: "GRG"
+    line2: "RTR"
+    line3: "GRG"
+  ingredients:
+    G: GOLD_BLOCK
+    R: REDSTONE_BLOCK
+    T: TOTEM_OF_UNDYING
+
+# Revival beacon recipe
+revival-beacon-recipe:
+  shape:
+    line1: "NHN"
+    line2: "HBH"
+    line3: "NHN"
+  ingredients:
+    N: NETHERITE_BLOCK
+    H: NETHER_STAR
+    B: BEACON
+
+# URL for resource pack
+resource-pack-url: "http://example.com/resourcepack.zip"
+
+# Worlds where the plugin is active
+worlds:
+  - world
+  - world_nether
+  - world_the_end
+
+# Base heart cap configuration for prestige levels
+base-heart-cap: 20
+
+# Maximum prestige level
+max-prestige: 10

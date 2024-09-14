@@ -1,0 +1,34 @@
+name: LifeStealPlugin
+version: 1.0
+main: org.mythofy.mythofylifestealplugin.MythofyLifestealPlugin
+api-version: 1.20
+depend: [PlaceholderAPI]
+commands:
+  withdraw:
+    description: Withdraw a heart
+    usage: /<command>
+  hearts:
+    description: Check your current hearts
+    usage: /<command>
+  lsrevive:
+    description: Revive a player
+    usage: /<command> <player>
+  giveheart:
+    description: Give yourself a heart item
+    usage: /<command>
+  prestige:
+    description: Prestige to increase your heart cap
+    usage: /<command>
+permissions:
+  lifesteal.withdraw:
+    description: Allows players to withdraw hearts
+    default: true
+  lifesteal.revive:
+    description: Allows players to revive others
+    default: op
+  lifesteal.giveheart:
+    description: Allows players to give themselves heart items
+    default: op
+  lifesteal.prestige:
+    description: Allows players to prestige
+    default: true
